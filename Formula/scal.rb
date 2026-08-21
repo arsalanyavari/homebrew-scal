@@ -3,6 +3,11 @@ class Scal < Formula
   homepage "https://github.com/arsalanyavari/scal"
   version "1.0.0"
 
+  resource "man_pages" do
+    url "https://github.com/arsalanyavari/scal/archive/afcaf79c764cd758b801d8144568f59afd987895.tar.gz"
+    sha256 "71809a67b923b7d899d3390fc0a416199cb5a3b882647a1e9618ba0d7742ae97"
+  end
+
   on_macos do
     on_arm do
       url "https://github.com/arsalanyavari/scal/releases/download/1.0.0/aarch64-apple-darwin.zip"
@@ -29,6 +34,13 @@ class Scal < Formula
     bin.install "scal"
     bin.install "sdate"
     bin.install "sstat"
+
+    resource("man_pages").stage do
+      man1.install "man/scal.1.roff" => "scal.1"
+      man1.install "man/sdate.1.roff" => "sdate.1"
+      man1.install "man/sstat.1.roff" => "sstat.1"
+      man3.install "man/slib.3.roff" => "slib.3"
+    end
   end
 
   test do
