@@ -1,0 +1,59 @@
+name: Update Formula
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "New version of scal (e.g., x.y.z)"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  update-formula:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout tap
+        uses: actions/checkout@v7
+
+      - name: Update Version and SHAs
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          echo "Updating Formula/scal.rb to version $VERSION"
+
+          # 1. Update the version string
+          sed -i "s/version \".*\"/version \"$VERSION\"/" Formula/scal.rb
+
+          # 2. Update man_pages URL and SHA
+          # For version >= 1.1.0, the man pages are in the main release tarball
+          MAN_URL="https://github.com/arsalanyavari/scal/archive/refs/tags/$VERSION.tar.gz"
+          echo "Downloading $MAN_URL to compute SHA..."
+          MAN_SHA=$(curl -sL "$MAN_URL" | sha256sum | awk '{print $1}')
+          sed -i '/resource "man_pages" do/,/end/ s|url ".*"|url "'"$MAN_URL"'"|' Formula/scal.rb
+          sed -i '/resource "man_pages" do/,/end/ s|sha256 ".*"|sha256 "'"$MAN_SHA"'"|' Formula/scal.rb
+
+          # 3. Update macOS and Linux binaries
+          for PLATFORM in "aarch64-apple-darwin" "x86_64-apple-darwin" "aarch64-unknown-linux-gnu" "x86_64-unknown-linux-gnu"; do
+            URL="https://github.com/arsalanyavari/scal/releases/download/$VERSION/$PLATFORM.zip"
+            echo "Downloading $URL to compute SHA..."
+            SHA=$(curl -sL "$URL" | sha256sum | awk '{print $1}')
+            
+            LINE=$(grep -n "$PLATFORM.zip" Formula/scal.rb | cut -d: -f1)
+            if [ -n "$LINE" ]; then
+              sed -i "${LINE}s|url \".*\"|url \"$URL\"|" Formula/scal.rb
+              NEXT_LINE=$((LINE + 1))
+              sed -i "${NEXT_LINE}s|sha256 \".*\"|sha256 \"$SHA\"|" Formula/scal.rb
+            fi
+          done
+
+          echo "Update complete. Diff:"
+          git diff
+
+      - name: Commit and Push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Formula/scal.rb
+          git commit -m "Bump formula to version ${{ github.event.inputs.version }}" || echo "No changes to commit"
+          git push origin main
