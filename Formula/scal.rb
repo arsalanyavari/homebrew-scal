@@ -1,32 +1,32 @@
 class Scal < Formula
   desc "Rust implementation of the classic jcal utilities"
   homepage "https://github.com/arsalanyavari/scal"
-  version "1.0.0"
+  version "1.1.0"
 
   resource "man_pages" do
-    url "https://github.com/arsalanyavari/scal/archive/afcaf79c764cd758b801d8144568f59afd987895.tar.gz"
-    sha256 "71809a67b923b7d899d3390fc0a416199cb5a3b882647a1e9618ba0d7742ae97"
+    url "https://github.com/arsalanyavari/scal/archive/refs/tags/1.1.0.tar.gz"
+    sha256 "bab96fbabf7548386d9b3fda0cdbc9ebfb84891ceda9de257259f3bd1309e32a"
   end
 
   on_macos do
     on_arm do
-      url "https://github.com/arsalanyavari/scal/releases/download/1.0.0/aarch64-apple-darwin.zip"
-      sha256 "5737c63f63d604783ea7d52da6cb02b1f68dda29cc81a1dcbedf6722e89da385"
+      url "https://github.com/arsalanyavari/scal/releases/download/1.1.0/aarch64-apple-darwin.zip"
+      sha256 "d35dca8413a1b3ceb430a85477d26feec63b6afe6d31cd1e651ea05972039232"
     end
     on_intel do
-      url "https://github.com/arsalanyavari/scal/releases/download/1.0.0/x86_64-apple-darwin.zip"
-      sha256 "da4cbdcee0cb2bd596b294bf676f7a033b637d934bdc8191619af682dcfd9002"
+      url "https://github.com/arsalanyavari/scal/releases/download/1.1.0/x86_64-apple-darwin.zip"
+      sha256 "3dd357a19619301c0190aa8dfbe013aa87efa334bd21d308b28c6404693806bd"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/arsalanyavari/scal/releases/download/1.0.0/aarch64-unknown-linux-gnu.zip"
-      sha256 "bdb868daf9eb1f04c59393e710500bef62b36d5fc852cffd67eee2aa80b739ee"
+      url "https://github.com/arsalanyavari/scal/releases/download/1.1.0/aarch64-unknown-linux-gnu.zip"
+      sha256 "450c3c240880134a1220819311b2edcb873acde1cfbe50c9b6322a4c7e8b1dba"
     end
     on_intel do
-      url "https://github.com/arsalanyavari/scal/releases/download/1.0.0/x86_64-unknown-linux-gnu.zip"
-      sha256 "ab3a26f95775dcb282787fa19ce603b145fa5905b551072ff97c19a2e0ee2b2e"
+      url "https://github.com/arsalanyavari/scal/releases/download/1.1.0/x86_64-unknown-linux-gnu.zip"
+      sha256 "d480d6c2693719a1a29c17653bb2eda5cc29e10f798f4a763f3376d8bf1eeaaa"
     end
   end
 
